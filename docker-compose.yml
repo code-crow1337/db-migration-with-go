@@ -1,0 +1,41 @@
+version: '3.9'
+services:
+  go_container:
+    build:
+      context: .
+      dockerfile: build/dbMigrations/Dockerfile
+      target: dev
+    working_dir: /app
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - DATABASE_HOST=${DB_HOST}
+      - DATABASE_PORT=${DB_PORT}
+#    networks:
+#      - db_migration_network
+#    depends_on:
+#      - db_migration_network
+    volumes:
+      - .:/app
+    command: [ 'go', 'run', 'cmd/dbMigrations/main.go' ]
+
+#  postgresdb:
+#    image: postgres:16-alpine
+#    container_name: postgresdb_container
+#    environment:
+#      - POSTGRES_USER=${DB_USER}
+#      - POSTGRES_PASSWORD=${DB_PASSWORD}
+#      - POSTGRES_DB=${DB_NAME}
+#      - DATABASE_HOST=${DB_HOST}
+#    ports:
+#      - '5432:5432'
+#    volumes:
+#      - ./postgres_data:/var/lib/postgresql/data
+#    networks:
+#      - db_migration_network
+
+#networks:
+#  db_migration_network:
+#    driver: bridge
+
